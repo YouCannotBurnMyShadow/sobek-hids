@@ -278,62 +278,6 @@ if config.has_option("firewall", "enable"):
 		fireMon = firewallMonitor()
 		fireMon.start()
 
-#Internet Explorer Monitor
-
-'''		
-Policy implementations
-
-- Check firewall status
-- Check antivirus installed
-- Check authentication mode
-  Application Found: Chat/IM - Yahoo.
-    Windows Audit: Null sessions allowed.
-      Windows Audit: LM authentication allowed (weak passwords).
-      
-Example One - Making sure a process is running
-
-For example, let's say that in your company everyone must have the process SecurityMyComp.exe running
-and have the directory C:\SecApp present. If you add the following rule to win_audit_rcl.txt you
-will be able to receive alerts whenever it is not happening:
-
-[Policy Violation - SecurityMyComp not running] [any] []
-p:!SecurityMyComp.exe;
-
-[Policy Violation - SecApp Dir not present] [any] []
-f:!\SecApp;
-
-Auditing - Null sessions Example
-
-In this second example (in the win_audit file), we generate a policy information if
-the following registry entry has a valud of zero.
-
-[Null sessions allowed] [any] []
-r:HKLM\System\CurrentControlSet\Control\Lsa -> RestrictAnonymous -> 0;
-
-[Chat/IM/VoIP - Skype] [any] []
-f:\Program Files\Skype\Phone;
-f:\Documents and Settings\All Users\Documents\My Skype Pictures;
-f:\Documents and Settings\Skype;
-f:\Documents and Settings\All Users\Start Menu\Programs\Skype;
-r:HKLM\SOFTWARE\Skype;
-r:HKEY_LOCAL_MACHINE\Software\Policies\Skype;
-p:Skype.exe;
-
-Implementar remote policy files
-
-Implementar action responses
-servicio arriba abajo
-proceso arriba abajo
-user creado borrado
-share compartido borrado
-usuario logeado cerrado
-
-The Win32_SessionProcess association WMI class represents an association between a logon session and the processes associated with that session. 
-
-The Win32_ServerConnection WMI class represents the connections made from a remote computer to a shared resource on the local computer. 
-
-'''
-
 
       
 
