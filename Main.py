@@ -54,11 +54,12 @@ class processCreationMonitor(Thread):
 			except:
 				logger.info("Process %s Created by %s" % (p1.Name,p1.ParentProcessId))	
 			procs[p1.ProcessId]=p1.Name
+                        '''
 			if p1.Name == "IEXPLORE.EXE":
 				#logger.info("Creating ieMonitor")
 				ieMonitor = ieMon.ieMon(logger, p1.ProcessId, ieRules)
 				ieMonitor.start()
-				
+                        '''
 
 
 class processDeletionMonitor(Thread):
