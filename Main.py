@@ -8,7 +8,6 @@ import fileMon
 import time
 #import ieMon
 logger = Logger.logger
-Logger.set_verbose('debug')
 
 procs = {}
 
@@ -204,6 +203,8 @@ class firewallMonitor(Thread):
 	
 config = ConfigParser.ConfigParser()
 config.read('config.cfg')
+verbose = config.get('log', 'verbose')
+Logger.set_verbose(verbose)
 
 if config.has_option("log", "file"):
 	Logger.add_file_handler(config.get('log', 'file'))
@@ -237,10 +238,16 @@ if config.has_option("media", "enable"):
 		medMon.start()
 
 #File Monitor
-if config.has_option("file", "enable"):
+filters = []
+for key, value in config.items('file'):
+  if key != 'enable' and key != 'path':
+    filters.append(value)
+    
+if config.has_option("file", "enable") and len(filters) > 0:
 	if config.get('file', 'enable') == "True":
 		logger.debug("Starting File Monitor")
-		fileMonitor = fileMon.fileMon(logger)
+                path = config.get('file', 'path')
+		fileMonitor = fileMon.fileMon(logger, path, filters)
 		fileMonitor.start()
 		
 #Share Monitor

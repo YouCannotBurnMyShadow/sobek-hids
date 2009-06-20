@@ -6,9 +6,16 @@ from Logger import Logger
 from threading import Thread
 
 class fileMon(Thread):
-	def __init__ (self, logger):
+	def __init__ (self, logger, path, filters):
 		Thread.__init__(self)
 		self.logger = logger
+                self.path = path
+                self.filters = filters
+                self.exprs = []
+                for f in self.filters:
+                  self.exprs.append(re.compile(f))
+                
+                
 	def run(self):
 		ACTIONS = {
 		  1 : "Created",
@@ -19,7 +26,7 @@ class fileMon(Thread):
 		}
 		FILE_LIST_DIRECTORY = 0x0001
 
-		path_to_watch = "c:/"
+		path_to_watch = self.path
 		hDir = win32file.CreateFile (
 		  path_to_watch,
 		  FILE_LIST_DIRECTORY,
@@ -45,7 +52,8 @@ class fileMon(Thread):
 		  )
 		  for action, file in results:
 		    full_filename = os.path.join (path_to_watch, file)
-		    p = re.compile(r".*doc")
-		    m = p.match(file)
-		    if m:
-			self.logger.info("File %s %s" % (file, ACTIONS.get (action, "Unknown")))
+                    for exp in self.exprs:
+                      m = exp.match(file)
+                      if m:
+                          self.logger.info("File %s %s" % (file, ACTIONS.get (action, "Unknown")))
+
